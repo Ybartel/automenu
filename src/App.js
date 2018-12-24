@@ -64,7 +64,7 @@ class App extends Component {
 
   loadIngredients(): [Ingredient] {
     if (localStorage.getItem(itemsKey.ingredients) === null) {
-        this.saveIngredients([]);
+        return [];
     }
     let value = localStorage.getItem(itemsKey.ingredients);
     try {
