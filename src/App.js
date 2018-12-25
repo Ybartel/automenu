@@ -44,17 +44,35 @@ class App extends Component {
     this.addMealGroup(new MealGroup(this.state.newMealGroupName));
   }
 
+  handleRemoveIngredient(index) {
+    this.removeIngredient(index);
+    window.location.reload();
+  }
+
+  handleRemoveMealGroup(index) {
+    this.removeMealGroup(index);
+    window.location.reload();
+  }
+
   render() {
     var listIngredients;
     var listMealGroups;
     if (this.state.ingredients !== "") {
-      listIngredients = this.state.ingredients.map(ingredient => (
+      listIngredients = this.state.ingredients.map((ingredient, index) => (
         <li>
           {ingredient.ingredientName} ({ingredient.unit})
+          <button onClick={() => this.handleRemoveIngredient(index)}>
+            Delete
+          </button>
         </li>
       ));
-      listMealGroups = this.state.mealGroups.map(group => (
-        <li>{group.groupName}</li>
+      listMealGroups = this.state.mealGroups.map((group, index) => (
+        <li>
+          {group.groupName}
+          <button onClick={() => this.handleRemoveMealGroup(index)}>
+            Delete
+          </button>
+        </li>
       ));
     }
     return (
@@ -130,6 +148,11 @@ class App extends Component {
     this.saveIngredients();
   }
 
+  removeIngredient(index) {
+    this.state.ingredients.splice(index, 1);
+    this.saveIngredients();
+  }
+
   loadMealGroups(): [MealGroup] {
     if (localStorage.getItem(itemsKey.mealGroups) === null) {
       return [];
@@ -150,6 +173,11 @@ class App extends Component {
 
   addMealGroup(mealGroup) {
     this.state.mealGroups.push(mealGroup);
+    this.saveMealGroups();
+  }
+
+  removeMealGroup(index) {
+    this.state.mealGroups.splice(index, 1);
     this.saveMealGroups();
   }
 }
