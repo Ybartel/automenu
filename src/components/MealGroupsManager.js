@@ -52,17 +52,18 @@ class MealGroupsManager extends React.Component {
           est un groupe de plats.
         </SimpleCard>
         <ul>{listMealGroups}</ul>
-        <form onSubmit={this.addNewMealGroup}>
-          <label>
-            Nom:
-            <input
-              type="text"
-              name="newMealGroupName"
-              value={this.state.newMealGroupName}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
+        <form onSubmit={this.addNewMealGroup} class="form-inline">
+          <input
+            class="form-control mr-2"
+            type="text"
+            name="newMealGroupName"
+            placeholder="Nom"
+            value={this.state.newMealGroupName}
+            onChange={this.handleChange}
+          />
+          <button class="btn btn-primary" type="submit">
+            Ajouter
+          </button>
         </form>
       </div>
     );

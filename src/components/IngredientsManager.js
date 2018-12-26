@@ -45,26 +45,26 @@ class IngredientsManager extends React.Component {
           ingrédient est composé d'un nom et d'une unité de mesure
         </SimpleCard>
         <ul>{listIngredients}</ul>
-        <form onSubmit={this.addNewIngredient}>
-          <label>
-            Nom:
-            <input
-              type="text"
-              name="newIngredientName"
-              value={this.state.newIngredientName}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label>
-            Unité de mesure :
-            <input
-              type="text"
-              name="newIngredientUnit"
-              value={this.state.newIngredientUnit}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
+        <form onSubmit={this.addNewIngredient} class="form-inline">
+          <input
+            class="form-control mr-2"
+            type="text"
+            name="newIngredientName"
+            placeholder="Nom"
+            value={this.state.newIngredientName}
+            onChange={this.handleChange}
+          />
+          <input
+            class="form-control mr-2"
+            type="text"
+            name="newIngredientUnit"
+            placeholder="Unité de mesure :"
+            value={this.state.newIngredientUnit}
+            onChange={this.handleChange}
+          />
+          <button class="btn btn-primary" type="submit">
+            Ajouter
+          </button>
         </form>
       </div>
     );
