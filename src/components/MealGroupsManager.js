@@ -1,6 +1,7 @@
 import React from "react";
 import MealGroup from "../model/MealGroup";
 import SimpleCard from "../components/SimpleCard";
+import TableLineWithDelete from "./TableLineWithDelete";
 
 const itemsKey = {
   mealGroups: "meal_groups"
@@ -36,12 +37,11 @@ class MealGroupsManager extends React.Component {
     let listMealGroups;
     if (this.state.mealGroups !== "") {
       listMealGroups = this.state.mealGroups.map((group, index) => (
-        <li>
+        <TableLineWithDelete
+          onDeleteClick={() => this.handleRemoveMealGroup(index)}
+        >
           {group.groupName}
-          <button onClick={() => this.handleRemoveMealGroup(index)}>
-            Delete
-          </button>
-        </li>
+        </TableLineWithDelete>
       ));
     }
     return (
@@ -51,7 +51,7 @@ class MealGroupsManager extends React.Component {
           définir un groupe de plats. Par exemple "Steak haché + Accompagnement"
           est un groupe de plats.
         </SimpleCard>
-        <ul>{listMealGroups}</ul>
+        <table class="table">{listMealGroups}</table>
         <form onSubmit={this.addNewMealGroup} class="form-inline">
           <input
             class="form-control mr-2"

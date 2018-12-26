@@ -1,6 +1,7 @@
 import React from "react";
 import Ingredient from "../model/Ingredient";
 import SimpleCard from "../components/SimpleCard";
+import TableLineWithDelete from "./TableLineWithDelete";
 
 const itemsKey = {
   ingredients: "ingredients"
@@ -30,12 +31,11 @@ class IngredientsManager extends React.Component {
     let listIngredients;
     if (this.state.ingredients !== "") {
       listIngredients = this.state.ingredients.map((ingredient, index) => (
-        <li>
+        <TableLineWithDelete
+          onDeleteClick={() => this.handleRemoveIngredient(index)}
+        >
           {ingredient.ingredientName} ({ingredient.unit})
-          <button onClick={() => this.handleRemoveIngredient(index)}>
-            Delete
-          </button>
-        </li>
+        </TableLineWithDelete>
       ));
     }
     return (
@@ -44,7 +44,7 @@ class IngredientsManager extends React.Component {
           On va commencer par se charger de la gestion des ingrédients. Un
           ingrédient est composé d'un nom et d'une unité de mesure
         </SimpleCard>
-        <ul>{listIngredients}</ul>
+        <table class="table">{listIngredients}</table>
         <form onSubmit={this.addNewIngredient} class="form-inline">
           <input
             class="form-control mr-2"
