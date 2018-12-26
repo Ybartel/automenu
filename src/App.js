@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Ingredient from "./model/Ingredient";
 import MealGroup from "./model/MealGroup";
+import SimpleCard from "./components/SimpleCard";
 
 const itemsKey = {
   ingredients: "ingredients",
@@ -77,10 +78,10 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <p>
+        <SimpleCard>
           On va commencer par se charger de la gestion des ingrédients. Un
           ingrédient est composé d'un nom et d'une unité de mesure
-        </p>
+        </SimpleCard>
         <ul>{listIngredients}</ul>
         <form onSubmit={this.addNewIngredient}>
           <label>
@@ -103,11 +104,11 @@ class App extends Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <p>
+        <SimpleCard>
           Maintenant il est temps de créer un plat. Pour commencer il nous faut
           définir un groupe de plats. Par exemple "Steak haché + Accompagnement"
           est un groupe de plats.
-        </p>
+        </SimpleCard>
         <ul>{listMealGroups}</ul>
         <form onSubmit={this.addNewMealGroup}>
           <label>
