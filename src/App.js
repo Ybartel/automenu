@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import "./App.css";
-import Ingredient from "./model/Ingredient";
 import MealGroup from "./model/MealGroup";
 import SimpleCard from "./components/SimpleCard";
+import IngredientsManager from "./components/IngredientsManager";
 
 const itemsKey = {
-  ingredients: "ingredients",
   mealGroups: "meal_groups"
 };
 
@@ -13,14 +12,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ingredients: this.loadIngredients(),
       mealGroups: this.loadMealGroups(),
-      newIngredientName: "",
-      newIngredientUnit: "",
       newMealGroupName: ""
     };
     this.handleChange = this.handleChange.bind(this);
-    this.addNewIngredient = this.addNewIngredient.bind(this);
     this.addNewMealGroup = this.addNewMealGroup.bind(this);
   }
 
@@ -34,20 +29,8 @@ class App extends Component {
     });
   }
 
-  addNewIngredient(event) {
-    this.addIngredient(
-      new Ingredient(this.state.newIngredientName, this.state.newIngredientUnit)
-    );
-    this.render();
-  }
-
   addNewMealGroup() {
     this.addMealGroup(new MealGroup(this.state.newMealGroupName));
-  }
-
-  handleRemoveIngredient(index) {
-    this.removeIngredient(index);
-    window.location.reload();
   }
 
   handleRemoveMealGroup(index) {
@@ -56,17 +39,8 @@ class App extends Component {
   }
 
   render() {
-    var listIngredients;
     var listMealGroups;
-    if (this.state.ingredients !== "") {
-      listIngredients = this.state.ingredients.map((ingredient, index) => (
-        <li>
-          {ingredient.ingredientName} ({ingredient.unit})
-          <button onClick={() => this.handleRemoveIngredient(index)}>
-            Delete
-          </button>
-        </li>
-      ));
+    if (this.state.mealGroups !== "") {
       listMealGroups = this.state.mealGroups.map((group, index) => (
         <li>
           {group.groupName}
@@ -78,32 +52,7 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <SimpleCard>
-          On va commencer par se charger de la gestion des ingrédients. Un
-          ingrédient est composé d'un nom et d'une unité de mesure
-        </SimpleCard>
-        <ul>{listIngredients}</ul>
-        <form onSubmit={this.addNewIngredient}>
-          <label>
-            Nom:
-            <input
-              type="text"
-              name="newIngredientName"
-              value={this.state.newIngredientName}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label>
-            Unité de mesure :
-            <input
-              type="text"
-              name="newIngredientUnit"
-              value={this.state.newIngredientUnit}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
+        <IngredientsManager />
         <SimpleCard>
           Maintenant il est temps de créer un plat. Pour commencer il nous faut
           définir un groupe de plats. Par exemple "Steak haché + Accompagnement"
@@ -124,34 +73,6 @@ class App extends Component {
         </form>
       </div>
     );
-  }
-
-  loadIngredients(): [Ingredient] {
-    if (localStorage.getItem(itemsKey.ingredients) === null) {
-      return [];
-    }
-    let value = localStorage.getItem(itemsKey.ingredients);
-    try {
-      value = JSON.parse(value);
-      return value;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  saveIngredients() {
-    let ingredientsJson = JSON.stringify(this.state.ingredients);
-    localStorage.setItem(itemsKey.ingredients, ingredientsJson);
-  }
-
-  addIngredient(ingredient) {
-    this.state.ingredients.push(ingredient);
-    this.saveIngredients();
-  }
-
-  removeIngredient(index) {
-    this.state.ingredients.splice(index, 1);
-    this.saveIngredients();
   }
 
   loadMealGroups(): [MealGroup] {
