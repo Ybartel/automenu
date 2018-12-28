@@ -41,7 +41,7 @@ class MealGroupsManager extends React.Component {
           onDeleteClick={() => this.handleRemoveMealGroup(index)}
         >
           {group.groupName} (
-          {typeof group.meals !== "undefined" ? group.meals.count() : 0} plats)
+          {typeof group.meals !== "undefined" ? group.meals.length : 0} plats)
         </TableLineWithDelete>
       ));
     }
