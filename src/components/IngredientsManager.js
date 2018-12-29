@@ -1,17 +1,13 @@
 import React from "react";
 import Ingredient from "../model/Ingredient";
-import SimpleCard from "../components/SimpleCard";
+import SimpleCard from "./SimpleCard";
 import TableLineWithDelete from "./TableLineWithDelete";
-
-const itemsKey = {
-  ingredients: "ingredients"
-};
+import { connect } from "react-redux";
 
 class IngredientsManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ingredients: IngredientsManager.loadIngredients(),
       newIngredientName: "",
       newIngredientUnit: ""
     };
@@ -21,23 +17,30 @@ class IngredientsManager extends React.Component {
   }
 
   addNewIngredient() {
-    this.addIngredient(
-      new Ingredient(this.state.newIngredientName, this.state.newIngredientUnit)
-    );
-    this.render();
+    const action = {
+      type: "ADD_INGREDIENT",
+      value: new Ingredient(
+        this.state.newIngredientName,
+        this.state.newIngredientUnit
+      )
+    };
+    this.props.dispatch(action);
+  }
+
+  removeIngredient(ingredient) {
+    const action = { type: "REMOVE_INGREDIENT", value: ingredient };
+    this.props.dispatch(action);
   }
 
   render(): React.ReactNode {
     let listIngredients;
-    if (this.state.ingredients !== "") {
-      listIngredients = this.state.ingredients.map((ingredient, index) => (
-        <TableLineWithDelete
-          onDeleteClick={() => this.handleRemoveIngredient(index)}
-        >
-          {ingredient.ingredientName} ({ingredient.unit})
-        </TableLineWithDelete>
-      ));
-    }
+    listIngredients = this.props.ingredients.map(ingredient => (
+      <TableLineWithDelete
+        onDeleteClick={() => this.removeIngredient(ingredient)}
+      >
+        {ingredient.ingredientName} ({ingredient.unit})
+      </TableLineWithDelete>
+    ));
     return (
       <div>
         <SimpleCard>
@@ -45,7 +48,7 @@ class IngredientsManager extends React.Component {
           ingrédient est composé d'un nom et d'une unité de mesure
         </SimpleCard>
         <table class="table">{listIngredients}</table>
-        <form onSubmit={this.addNewIngredient} class="form-inline">
+        <div class="form-inline">
           <input
             class="form-control mr-2"
             type="text"
@@ -62,45 +65,12 @@ class IngredientsManager extends React.Component {
             value={this.state.newIngredientUnit}
             onChange={this.handleChange}
           />
-          <button class="btn btn-primary" type="submit">
+          <button onClick={this.addNewIngredient} class="btn btn-primary">
             Ajouter
           </button>
-        </form>
+        </div>
       </div>
     );
-  }
-
-  addIngredient(ingredient) {
-    this.state.ingredients.push(ingredient);
-    this.saveIngredients();
-  }
-
-  removeIngredient(index) {
-    this.state.ingredients.splice(index, 1);
-    this.saveIngredients();
-  }
-
-  static loadIngredients(): [Ingredient] {
-    if (localStorage.getItem(itemsKey.ingredients) === null) {
-      return [];
-    }
-    let value = localStorage.getItem(itemsKey.ingredients);
-    try {
-      value = JSON.parse(value);
-      return value;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  saveIngredients() {
-    let ingredientsJson = JSON.stringify(this.state.ingredients);
-    localStorage.setItem(itemsKey.ingredients, ingredientsJson);
-  }
-
-  handleRemoveIngredient(index) {
-    this.removeIngredient(index);
-    window.location.reload();
   }
 
   handleChange(event) {
@@ -114,4 +84,10 @@ class IngredientsManager extends React.Component {
   }
 }
 
-export default IngredientsManager;
+const mapStateToProps = state => {
+  return {
+    ingredients: state.ingredients
+  };
+};
+
+export default connect(mapStateToProps)(IngredientsManager);
