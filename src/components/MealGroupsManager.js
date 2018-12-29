@@ -2,16 +2,12 @@ import React from "react";
 import MealGroup from "../model/MealGroup";
 import SimpleCard from "../components/SimpleCard";
 import TableLineWithDelete from "./TableLineWithDelete";
-
-const itemsKey = {
-  mealGroups: "meal_groups"
-};
+import { connect } from "react-redux";
 
 class MealGroupsManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mealGroups: MealGroupsManager.loadMealGroups(),
       newMealGroupName: ""
     };
 
@@ -30,18 +26,22 @@ class MealGroupsManager extends React.Component {
   }
 
   addNewMealGroup() {
-    this.addMealGroup(new MealGroup(this.state.newMealGroupName));
+    const action = {
+      type: "ADD_MEAL_GROUP",
+      value: new MealGroup(this.state.newMealGroupName)
+    };
+    this.props.dispatch(action);
   }
 
   render(): React.ReactNode {
+    console.log(this.props);
     let listMealGroups;
     if (this.state.mealGroups !== "") {
-      listMealGroups = this.state.mealGroups.map((group, index) => (
+      listMealGroups = this.props.mealGroups.map(mealGroup => (
         <TableLineWithDelete
-          onDeleteClick={() => this.handleRemoveMealGroup(index)}
+          onDeleteClick={() => this.removeMealGroup(mealGroup)}
         >
-          {group.groupName} (
-          {typeof group.meals !== "undefined" ? group.meals.length : 0} plats)
+          {mealGroup.groupName} ({mealGroup.meals.length || 0} plats)
         </TableLineWithDelete>
       ));
     }
@@ -53,7 +53,7 @@ class MealGroupsManager extends React.Component {
           est un groupe de plats.
         </SimpleCard>
         <table class="table">{listMealGroups}</table>
-        <form onSubmit={this.addNewMealGroup} class="form-inline">
+        <div class="form-inline">
           <input
             class="form-control mr-2"
             type="text"
@@ -62,46 +62,24 @@ class MealGroupsManager extends React.Component {
             value={this.state.newMealGroupName}
             onChange={this.handleChange}
           />
-          <button class="btn btn-primary" type="submit">
+          <button class="btn btn-primary" onClick={this.addNewMealGroup}>
             Ajouter
           </button>
-        </form>
+        </div>
       </div>
     );
   }
 
-  static loadMealGroups(): [MealGroup] {
-    if (localStorage.getItem(itemsKey.mealGroups) === null) {
-      return [];
-    }
-    let value = localStorage.getItem(itemsKey.mealGroups);
-    try {
-      value = JSON.parse(value);
-      return value;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  saveMealGroups() {
-    let json = JSON.stringify(this.state.mealGroups);
-    localStorage.setItem(itemsKey.mealGroups, json);
-  }
-
-  addMealGroup(mealGroup) {
-    this.state.mealGroups.push(mealGroup);
-    this.saveMealGroups();
-  }
-
-  removeMealGroup(index) {
-    this.state.mealGroups.splice(index, 1);
-    this.saveMealGroups();
-  }
-
-  handleRemoveMealGroup(index) {
-    this.removeMealGroup(index);
-    window.location.reload();
+  removeMealGroup(mealGroup) {
+    const action = { type: "REMOVE_MEAL_GROUP", value: mealGroup };
+    this.props.dispatch(action);
   }
 }
 
-export default MealGroupsManager;
+const mapStateToProps = state => {
+  return {
+    mealGroups: state.mealGroups
+  };
+};
+
+export default connect(mapStateToProps)(MealGroupsManager);
