@@ -2,18 +2,22 @@ import React from "react";
 import Ingredient from "../model/Ingredient";
 import SimpleCard from "./SimpleCard";
 import TableLineWithDelete from "./TableLineWithDelete";
+import ModalExport from "./ModalExport";
 import { connect } from "react-redux";
 
 class IngredientsManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isExportModalOpen: false,
+      exportedJson: "",
       newIngredientName: "",
       newIngredientUnit: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.addNewIngredient = this.addNewIngredient.bind(this);
+    this.openExportModal = this.openExportModal.bind(this);
   }
 
   addNewIngredient() {
@@ -43,6 +47,13 @@ class IngredientsManager extends React.Component {
     ));
     return (
       <div>
+        <ModalExport
+          isOpen={this.state.isExportModalOpen}
+          onRequestClose={() => {
+            this.setState({ isExportModalOpen: false });
+          }}
+          content={this.state.exportedJson}
+        />
         <SimpleCard>
           On va commencer par se charger de la gestion des ingrédients. Un
           ingrédient est composé d'un nom et d'une unité de mesure
@@ -65,12 +76,22 @@ class IngredientsManager extends React.Component {
             value={this.state.newIngredientUnit}
             onChange={this.handleChange}
           />
-          <button onClick={this.addNewIngredient} class="btn btn-primary">
+          <button onClick={this.addNewIngredient} class="btn btn-primary mr-2">
             Ajouter
+          </button>
+          <button className="btn btn-primary" onClick={this.openExportModal}>
+            Exporter
           </button>
         </div>
       </div>
     );
+  }
+
+  openExportModal() {
+    this.setState({
+      exportedJson: JSON.stringify(this.props.ingredients),
+      isExportModalOpen: true
+    });
   }
 
   handleChange(event) {

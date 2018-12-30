@@ -2,17 +2,21 @@ import React from "react";
 import MealGroup from "../model/MealGroup";
 import SimpleCard from "../components/SimpleCard";
 import TableLineWithDelete from "./TableLineWithDelete";
+import ModalExport from "./ModalExport";
 import { connect } from "react-redux";
 
 class MealGroupsManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isExportModalOpen: false,
+      exportedJson: "",
       newMealGroupName: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.addNewMealGroup = this.addNewMealGroup.bind(this);
+    this.openExportModal = this.openExportModal.bind(this);
   }
 
   handleChange(event) {
@@ -47,6 +51,13 @@ class MealGroupsManager extends React.Component {
     }
     return (
       <div>
+        <ModalExport
+          isOpen={this.state.isExportModalOpen}
+          onRequestClose={() => {
+            this.setState({ isExportModalOpen: false });
+          }}
+          content={this.state.exportedJson}
+        />
         <SimpleCard>
           Maintenant il est temps de créer un plat. Pour commencer il nous faut
           définir un groupe de plats. Par exemple "Steak haché + Accompagnement"
@@ -62,12 +73,22 @@ class MealGroupsManager extends React.Component {
             value={this.state.newMealGroupName}
             onChange={this.handleChange}
           />
-          <button class="btn btn-primary" onClick={this.addNewMealGroup}>
+          <button class="btn btn-primary mr-2" onClick={this.addNewMealGroup}>
             Ajouter
+          </button>
+          <button class="btn btn-primary" onClick={this.openExportModal}>
+            Exporter
           </button>
         </div>
       </div>
     );
+  }
+
+  openExportModal() {
+    this.setState({
+      exportedJson: JSON.stringify(this.props.mealGroups),
+      isExportModalOpen: true
+    });
   }
 
   removeMealGroup(mealGroup) {
