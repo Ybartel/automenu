@@ -3,6 +3,7 @@ import MealGroup from "../model/MealGroup";
 import SimpleCard from "../components/SimpleCard";
 import TableLineWithDelete from "./TableLineWithDelete";
 import ModalExport from "./ModalExport";
+import ModalImport from "./ModalImport";
 import { connect } from "react-redux";
 
 class MealGroupsManager extends React.Component {
@@ -10,6 +11,7 @@ class MealGroupsManager extends React.Component {
     super(props);
     this.state = {
       isExportModalOpen: false,
+      isImportModalOpen: false,
       exportedJson: "",
       newMealGroupName: ""
     };
@@ -17,6 +19,8 @@ class MealGroupsManager extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.addNewMealGroup = this.addNewMealGroup.bind(this);
     this.openExportModal = this.openExportModal.bind(this);
+    this.openImportModal = this.openImportModal.bind(this);
+    this.onImportModalValidate = this.onImportModalValidate.bind(this);
   }
 
   handleChange(event) {
@@ -58,6 +62,13 @@ class MealGroupsManager extends React.Component {
           }}
           content={this.state.exportedJson}
         />
+        <ModalImport
+          isOpen={this.state.isImportModalOpen}
+          onRequestClose={() => {
+            this.setState({ isImportModalOpen: false });
+          }}
+          onValidate={this.onImportModalValidate}
+        />
         <SimpleCard>
           Maintenant il est temps de créer un plat. Pour commencer il nous faut
           définir un groupe de plats. Par exemple "Steak haché + Accompagnement"
@@ -76,8 +87,11 @@ class MealGroupsManager extends React.Component {
           <button class="btn btn-primary mr-2" onClick={this.addNewMealGroup}>
             Ajouter
           </button>
-          <button class="btn btn-primary" onClick={this.openExportModal}>
+          <button class="btn btn-primary mr-2" onClick={this.openExportModal}>
             Exporter
+          </button>
+          <button className="btn btn-primary" onClick={this.openImportModal}>
+            Importer
           </button>
         </div>
       </div>
@@ -89,6 +103,17 @@ class MealGroupsManager extends React.Component {
       exportedJson: JSON.stringify(this.props.mealGroups),
       isExportModalOpen: true
     });
+  }
+
+  openImportModal() {
+    this.setState({ isImportModalOpen: true });
+  }
+
+  onImportModalValidate(data) {
+    console.log("onImportModalValidate: " + data);
+    const action = { type: "IMPORT_MEAL_GROUPS", value: data };
+    this.props.dispatch(action);
+    this.setState({ isImportModalOpen: false });
   }
 
   removeMealGroup(mealGroup) {

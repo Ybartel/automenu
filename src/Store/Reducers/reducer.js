@@ -15,6 +15,18 @@ function manage(state = initialState, action) {
         mealGroups: state.mealGroups.filter(item => item !== action.value)
       };
       return nextState;
+    case "IMPORT_MEAL_GROUPS":
+      try {
+        let value = JSON.parse(action.value);
+        nextState = {
+          ...state,
+          mealGroups: value
+        };
+      } catch (e) {
+        console.log(e);
+        return state;
+      }
+      return nextState;
     case "ADD_INGREDIENT":
       nextState = {
         ...state,
