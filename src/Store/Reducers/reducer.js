@@ -39,6 +39,18 @@ function manage(state = initialState, action) {
         ingredients: state.ingredients.filter(item => item !== action.value)
       };
       return nextState;
+    case "IMPORT_INGREDIENTS":
+      try {
+        let value = JSON.parse(action.value);
+        nextState = {
+          ...state,
+          ingredients: value
+        };
+      } catch (e) {
+        console.log(e);
+        return state;
+      }
+      return nextState;
     default:
       return state;
   }

@@ -3,6 +3,7 @@ import Ingredient from "../model/Ingredient";
 import SimpleCard from "./SimpleCard";
 import TableLineWithDelete from "./TableLineWithDelete";
 import ModalExport from "./ModalExport";
+import ModalImport from "./ModalImport";
 import { connect } from "react-redux";
 
 class IngredientsManager extends React.Component {
@@ -10,6 +11,7 @@ class IngredientsManager extends React.Component {
     super(props);
     this.state = {
       isExportModalOpen: false,
+      isImportModalOpen: false,
       exportedJson: "",
       newIngredientName: "",
       newIngredientUnit: ""
@@ -18,6 +20,8 @@ class IngredientsManager extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.addNewIngredient = this.addNewIngredient.bind(this);
     this.openExportModal = this.openExportModal.bind(this);
+    this.openImportModal = this.openImportModal.bind(this);
+    this.onImportModalValidate = this.onImportModalValidate.bind(this);
   }
 
   addNewIngredient() {
@@ -54,6 +58,13 @@ class IngredientsManager extends React.Component {
           }}
           content={this.state.exportedJson}
         />
+        <ModalImport
+          isOpen={this.state.isImportModalOpen}
+          onRequestClose={() => {
+            this.setState({ isImportModalOpen: false });
+          }}
+          onValidate={this.onImportModalValidate}
+        />
         <SimpleCard>
           On va commencer par se charger de la gestion des ingrédients. Un
           ingrédient est composé d'un nom et d'une unité de mesure
@@ -79,8 +90,14 @@ class IngredientsManager extends React.Component {
           <button onClick={this.addNewIngredient} class="btn btn-primary mr-2">
             Ajouter
           </button>
-          <button className="btn btn-primary" onClick={this.openExportModal}>
+          <button
+            className="btn btn-primary mr-2"
+            onClick={this.openExportModal}
+          >
             Exporter
+          </button>
+          <button className="btn btn-primary" onClick={this.openImportModal}>
+            Importer
           </button>
         </div>
       </div>
@@ -92,6 +109,17 @@ class IngredientsManager extends React.Component {
       exportedJson: JSON.stringify(this.props.ingredients),
       isExportModalOpen: true
     });
+  }
+
+  openImportModal() {
+    this.setState({ isImportModalOpen: true });
+  }
+
+  onImportModalValidate(data) {
+    console.log("onImportModalValidate: " + data);
+    const action = { type: "IMPORT_INGREDIENTS", value: data };
+    this.props.dispatch(action);
+    this.setState({ isImportModalOpen: false });
   }
 
   handleChange(event) {
