@@ -49,7 +49,13 @@ class MealGroupsManager extends React.Component {
         <TableLineWithDelete
           onDeleteClick={() => this.removeMealGroup(mealGroup)}
         >
-          {mealGroup.groupName} ({mealGroup.meals.length || 0} plats)
+          <button
+            type="button"
+            class="btn btn-link"
+            onClick={() => this.selectMealGroup(mealGroup)}
+          >
+            {mealGroup.groupName} ({mealGroup.meals.length || 0} plats)
+          </button>
         </TableLineWithDelete>
       ));
     }
@@ -120,11 +126,17 @@ class MealGroupsManager extends React.Component {
     const action = { type: "REMOVE_MEAL_GROUP", value: mealGroup };
     this.props.dispatch(action);
   }
+
+  selectMealGroup(mealGroup) {
+    const action = { type: "SET_SELECTED_MEAL_GROUP", value: mealGroup };
+    this.props.dispatch(action);
+  }
 }
 
 const mapStateToProps = state => {
   return {
-    mealGroups: state.mealGroups
+    mealGroups: state.mealGroups,
+    selectedMealGroup: state.selectedMealGroup
   };
 };
 

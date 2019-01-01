@@ -1,4 +1,8 @@
-const initialState = { ingredients: [], mealGroups: [] };
+const initialState = {
+  ingredients: [],
+  mealGroups: [],
+  selectedMealGroup: null
+};
 
 function manage(state = initialState, action) {
   let nextState;
@@ -26,6 +30,12 @@ function manage(state = initialState, action) {
         console.log(e);
         return state;
       }
+      return nextState;
+    case "SET_SELECTED_MEAL_GROUP":
+      nextState = {
+        ...state,
+        selectedMealGroup: action.value
+      };
       return nextState;
     case "ADD_INGREDIENT":
       nextState = {

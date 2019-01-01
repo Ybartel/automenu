@@ -4,6 +4,7 @@ import Store from "./Store/configureStore";
 import "./App.css";
 import IngredientsManager from "./components/IngredientsManager";
 import MealGroupsManager from "./components/MealGroupsManager";
+import SelectedMealGroupManager from "./components/SelectedMealGroupManager";
 
 class App extends Component {
   render() {
@@ -17,6 +18,11 @@ class App extends Component {
               </div>
               <div className="col-6">
                 <MealGroupsManager />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-12">
+                <SelectedMealGroupManager />
               </div>
             </div>
           </div>
