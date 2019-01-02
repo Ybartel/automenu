@@ -1,6 +1,7 @@
 import React from "react";
 import MealGroup from "../model/MealGroup";
 import SimpleCard from "../components/SimpleCard";
+import CustomTable from "./CustomTable";
 import TableLineWithDelete from "./TableLineWithDelete";
 import ModalExport from "./ModalExport";
 import ModalImport from "./ModalImport";
@@ -80,7 +81,7 @@ class MealGroupsManager extends React.Component {
           définir un groupe de plats. Par exemple "Steak haché + Accompagnement"
           est un groupe de plats.
         </SimpleCard>
-        <table class="table">{listMealGroups}</table>
+        <CustomTable content={listMealGroups} />
         <div class="form-inline">
           <input
             class="form-control mr-2"

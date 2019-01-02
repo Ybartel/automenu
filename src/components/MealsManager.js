@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import CustomTable from "./CustomTable";
 import TableLineWithDelete from "./TableLineWithDelete";
 
 class MealsManager extends React.Component {
@@ -26,7 +27,7 @@ class MealsManager extends React.Component {
     }
     return (
       <div>
-        <table className="table">{meals}</table>
+        <CustomTable content={meals} />
         <div className="form-inline">
           <input
             className="form-control mr-2"

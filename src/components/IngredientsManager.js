@@ -1,6 +1,7 @@
 import React from "react";
 import Ingredient from "../model/Ingredient";
 import SimpleCard from "./SimpleCard";
+import CustomTable from "./CustomTable";
 import TableLineWithDelete from "./TableLineWithDelete";
 import ModalExport from "./ModalExport";
 import ModalImport from "./ModalImport";
@@ -69,7 +70,7 @@ class IngredientsManager extends React.Component {
           On va commencer par se charger de la gestion des ingrédients. Un
           ingrédient est composé d'un nom et d'une unité de mesure
         </SimpleCard>
-        <table class="table">{listIngredients}</table>
+        <CustomTable content={listIngredients} />
         <div class="form-inline">
           <input
             class="form-control mr-2"
