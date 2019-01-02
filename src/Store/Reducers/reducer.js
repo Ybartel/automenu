@@ -37,6 +37,15 @@ function manage(state = initialState, action) {
         selectedMealGroup: action.value
       };
       return nextState;
+    case "ADD_MEAL":
+      let mealGroups = [...state.mealGroups];
+      let i = mealGroups.indexOf(state.selectedMealGroup);
+      mealGroups[i].meals = [...mealGroups[i].meals, action.value];
+      nextState = {
+        ...state,
+        mealGroups: mealGroups
+      };
+      return nextState;
     case "ADD_INGREDIENT":
       nextState = {
         ...state,

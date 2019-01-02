@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import CustomTable from "./CustomTable";
 import TableLineWithDelete from "./TableLineWithDelete";
+import Meal from "../model/Meal";
 
 class MealsManager extends React.Component {
   constructor(props) {
@@ -46,7 +47,11 @@ class MealsManager extends React.Component {
   }
 
   addNewMeal() {
-    // TODO: Ajouter le repas dans la liste des repas du MealGroup
+    const action = {
+      type: "ADD_MEAL",
+      value: new Meal(this.state.newMealName, 0, 0, 0, 0)
+    };
+    this.props.dispatch(action);
   }
 
   handleChange(event) {
@@ -62,7 +67,8 @@ class MealsManager extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    selectedMealGroup: state.selectedMealGroup
+    selectedMealGroup: state.selectedMealGroup,
+    mealGroups: state.mealGroups
   };
 };
 
