@@ -5,23 +5,22 @@ const initialState = {
 };
 
 function manage(state = initialState, action) {
-  switch (action.type) {
-    case "ADD_MEAL_GROUP":
-    case "REMOVE_MEAL_GROUP":
-    case "IMPORT_MEAL_GROUPS":
-      return _manageMealGroups(state, action);
-    case "SET_SELECTED_GROUP":
-      return _manageSelectedMealGroup(state, action);
-    case "ADD_MEAL":
-    case "REMOVE_MEAL":
-      return _manageMeals(state, action);
-    case "ADD_INGREDIENT":
-    case "REMOVE_INGREDIENT":
-    case "IMPORT_INGREDIENTS":
-      return _manageIngredients(state, action);
-    default:
-      return state;
+  if (_match(action.type, "MEAL_GROUP")) {
+    return _manageMealGroups(state, action);
+  } else if (_match(action.type, "SELECTED_GROUP")) {
+    return _manageSelectedMealGroup(state, action);
+  } else if (_match(action.type, "MEAL")) {
+    return _manageMeals(state, action);
+  } else if (_match(action.type, "INGREDIENT")) {
+    return _manageIngredients(state, action);
+  } else {
+    return state;
   }
+}
+
+function _match(type, pattern) {
+  let fullPattern = '_' + pattern + '(S?)$';
+  return type.match(new RegExp(fullPattern, 'g'));
 }
 
 function _manageMealGroups(state = initialState, action) {
