@@ -129,7 +129,7 @@ class MealGroupsManager extends React.Component {
   }
 
   selectMealGroup(mealGroup) {
-    const action = { type: "SET_SELECTED_MEAL_GROUP", value: mealGroup };
+    const action = { type: "SET_SELECTED_GROUP", value: mealGroup };
     this.props.dispatch(action);
   }
 }

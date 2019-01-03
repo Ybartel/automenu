@@ -10,7 +10,7 @@ function manage(state = initialState, action) {
     case "REMOVE_MEAL_GROUP":
     case "IMPORT_MEAL_GROUPS":
       return _manageMealGroups(state, action);
-    case "SET_SELECTED_MEAL_GROUP":
+    case "SET_SELECTED_GROUP":
       return _manageSelectedMealGroup(state, action);
     case "ADD_MEAL":
     case "REMOVE_MEAL":
@@ -54,7 +54,7 @@ function _manageMealGroups(state = initialState, action) {
 
 function _manageSelectedMealGroup(state = initialState, action) {
   switch (action.type) {
-    case "SET_SELECTED_MEAL_GROUP":
+    case "SET_SELECTED_GROUP":
       return {
         ...state,
         selectedMealGroup: action.value
