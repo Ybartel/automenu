@@ -46,6 +46,16 @@ function manage(state = initialState, action) {
         mealGroups: mealGroups
       };
       return nextState;
+    case "REMOVE_MEAL":
+      nextState = {
+        ...state,
+        mealGroups: _removeMealFromGroup(
+          [...state.mealGroups],
+          state.selectedMealGroup,
+          action.value
+        )
+      };
+      return nextState;
     case "ADD_INGREDIENT":
       nextState = {
         ...state,
@@ -73,6 +83,12 @@ function manage(state = initialState, action) {
     default:
       return state;
   }
+}
+
+function _removeMealFromGroup(mealGroups, selectedMealGroup, meal) {
+  let i = mealGroups.indexOf(selectedMealGroup);
+  mealGroups[i].meals = mealGroups[i].meals.filter(item => item !== meal);
+  return mealGroups;
 }
 
 export default manage;
