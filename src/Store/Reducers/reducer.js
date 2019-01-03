@@ -5,24 +5,41 @@ const initialState = {
 };
 
 function manage(state = initialState, action) {
-  let nextState;
   switch (action.type) {
     case "ADD_MEAL_GROUP":
-      nextState = {
+    case "REMOVE_MEAL_GROUP":
+    case "IMPORT_MEAL_GROUPS":
+      return _manageMealGroups(state, action);
+    case "SET_SELECTED_MEAL_GROUP":
+      return _manageSelectedMealGroup(state, action);
+    case "ADD_MEAL":
+    case "REMOVE_MEAL":
+      return _manageMeals(state, action);
+    case "ADD_INGREDIENT":
+    case "REMOVE_INGREDIENT":
+    case "IMPORT_INGREDIENTS":
+      return _manageIngredients(state, action);
+    default:
+      return state;
+  }
+}
+
+function _manageMealGroups(state = initialState, action) {
+  switch (action.type) {
+    case "ADD_MEAL_GROUP":
+      return {
         ...state,
         mealGroups: [...state.mealGroups, action.value]
       };
-      return nextState || state;
     case "REMOVE_MEAL_GROUP":
-      nextState = {
+      return {
         ...state,
         mealGroups: state.mealGroups.filter(item => item !== action.value)
       };
-      return nextState;
     case "IMPORT_MEAL_GROUPS":
       try {
         let value = JSON.parse(action.value);
-        nextState = {
+        return {
           ...state,
           mealGroups: value
         };
@@ -30,48 +47,64 @@ function manage(state = initialState, action) {
         console.log(e);
         return state;
       }
-      return nextState;
+    default:
+      return state;
+  }
+}
+
+function _manageSelectedMealGroup(state = initialState, action) {
+  switch (action.type) {
     case "SET_SELECTED_MEAL_GROUP":
-      nextState = {
+      return {
         ...state,
         selectedMealGroup: action.value
       };
-      return nextState;
+    default:
+      return state;
+  }
+}
+
+function _manageMeals(state = initialState, action) {
+  let mealGroups = [...state.mealGroups];
+  let i = mealGroups.indexOf(state.selectedMealGroup);
+  switch (action.type) {
     case "ADD_MEAL":
-      let mealGroups = [...state.mealGroups];
-      let i = mealGroups.indexOf(state.selectedMealGroup);
       mealGroups[i].meals = [...mealGroups[i].meals, action.value];
-      nextState = {
+      return {
         ...state,
         mealGroups: mealGroups
       };
-      return nextState;
     case "REMOVE_MEAL":
-      nextState = {
+      mealGroups[i].meals = mealGroups[i].meals.filter(
+        item => item !== action.value
+      );
+      return {
         ...state,
-        mealGroups: _removeMealFromGroup(
-          [...state.mealGroups],
-          state.selectedMealGroup,
-          action.value
-        )
+        mealGroups: mealGroups
       };
-      return nextState;
+    default:
+      return state;
+  }
+}
+
+function _manageIngredients(state = initialState, action) {
+  switch (action.type) {
     case "ADD_INGREDIENT":
-      nextState = {
-        ...state,
-        ingredients: [...state.ingredients, action.value]
-      };
-      return nextState || state;
+      return (
+        {
+          ...state,
+          ingredients: [...state.ingredients, action.value]
+        } || state
+      );
     case "REMOVE_INGREDIENT":
-      nextState = {
+      return {
         ...state,
         ingredients: state.ingredients.filter(item => item !== action.value)
       };
-      return nextState;
     case "IMPORT_INGREDIENTS":
       try {
         let value = JSON.parse(action.value);
-        nextState = {
+        return {
           ...state,
           ingredients: value
         };
@@ -79,16 +112,9 @@ function manage(state = initialState, action) {
         console.log(e);
         return state;
       }
-      return nextState;
     default:
       return state;
   }
-}
-
-function _removeMealFromGroup(mealGroups, selectedMealGroup, meal) {
-  let i = mealGroups.indexOf(selectedMealGroup);
-  mealGroups[i].meals = mealGroups[i].meals.filter(item => item !== meal);
-  return mealGroups;
 }
 
 export default manage;
