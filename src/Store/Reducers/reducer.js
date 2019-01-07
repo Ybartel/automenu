@@ -13,14 +13,16 @@ function manage(state = initialState, action) {
     return _manageMeals(state, action);
   } else if (_match(action.type, "INGREDIENT")) {
     return _manageIngredients(state, action);
+  } else if (_match(action.type, "GLOBAL_STATE")) {
+    return _manageGlobalState(state, action);
   } else {
     return state;
   }
 }
 
 function _match(type, pattern) {
-  let fullPattern = '_' + pattern + '(S?)$';
-  return type.match(new RegExp(fullPattern, 'g'));
+  let fullPattern = "_" + pattern + "(S?)$";
+  return type.match(new RegExp(fullPattern, "g"));
 }
 
 function _manageMealGroups(state = initialState, action) {
@@ -107,6 +109,20 @@ function _manageIngredients(state = initialState, action) {
           ...state,
           ingredients: value
         };
+      } catch (e) {
+        console.log(e);
+        return state;
+      }
+    default:
+      return state;
+  }
+}
+
+function _manageGlobalState(state = initialState, action) {
+  switch (action.type) {
+    case "IMPORT_GLOBAL_STATE":
+      try {
+        return JSON.parse(action.value);
       } catch (e) {
         console.log(e);
         return state;

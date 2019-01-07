@@ -5,6 +5,7 @@ import "./App.css";
 import IngredientsManager from "./components/IngredientsManager";
 import MealGroupsManager from "./components/MealGroupsManager";
 import SelectedMealGroupManager from "./components/SelectedMealGroupManager";
+import GlobalStateManager from "./components/GlobalStateManager";
 
 class App extends Component {
   render() {
@@ -23,6 +24,11 @@ class App extends Component {
             <div className="row">
               <div className="col-12">
                 <SelectedMealGroupManager />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-12 mb-2">
+                <GlobalStateManager />
               </div>
             </div>
           </div>
