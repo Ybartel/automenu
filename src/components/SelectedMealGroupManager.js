@@ -2,6 +2,7 @@ import React from "react";
 import SimpleCard from "./SimpleCard";
 import { connect } from "react-redux";
 import MealsManager from "./MealsManager";
+import SelectedMealManager from "./SelectedMealManager";
 
 class SelectedMealGroupManager extends React.Component {
   render(): React.ReactNode {
@@ -12,6 +13,15 @@ class SelectedMealGroupManager extends React.Component {
         </div>
       );
     } else {
+      let selectedMealManager;
+      if (this.props.selectedMeal != null) {
+        selectedMealManager = (
+          <div className="col-6">
+            <SimpleCard>Contenu du repas sélectionné</SimpleCard>
+            <SelectedMealManager />
+          </div>
+        );
+      }
       return (
         <div>
           <div className="row">
@@ -26,9 +36,7 @@ class SelectedMealGroupManager extends React.Component {
               <SimpleCard>Liste des Repas</SimpleCard>
               <MealsManager />
             </div>
-            <div className="col-6">
-              <SimpleCard>Contenu du repas</SimpleCard>
-            </div>
+            {selectedMealManager}
           </div>
         </div>
       );
@@ -38,7 +46,8 @@ class SelectedMealGroupManager extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    selectedMealGroup: state.selectedMealGroup
+    selectedMealGroup: state.selectedMealGroup,
+    selectedMeal: state.selectedMeal
   };
 };
 

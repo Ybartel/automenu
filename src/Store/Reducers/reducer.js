@@ -1,7 +1,8 @@
 const initialState = {
   ingredients: [],
   mealGroups: [],
-  selectedMealGroup: null
+  selectedMealGroup: null,
+  selectedMeal: null
 };
 
 function manage(state = initialState, action) {
@@ -58,7 +59,8 @@ function _manageSelectedMealGroup(state = initialState, action) {
     case "SET_SELECTED_GROUP":
       return {
         ...state,
-        selectedMealGroup: action.value
+        selectedMealGroup: action.value,
+        selectedMeal: null
       };
     default:
       return state;
@@ -83,6 +85,8 @@ function _manageMeals(state = initialState, action) {
         ...state,
         mealGroups: mealGroups
       };
+    case "SELECT_MEAL":
+      return { ...state, selectedMeal: action.value };
     default:
       return state;
   }

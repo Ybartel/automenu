@@ -20,7 +20,11 @@ class MealsManager extends React.Component {
     if (this.props.selectedMealGroup.meals !== "") {
       meals = this.props.selectedMealGroup.meals.map(meal => (
         <TableLineWithDelete onDeleteClick={() => this.removeMeal(meal)}>
-          <button type="button" className="btn btn-link">
+          <button
+            type="button"
+            className="btn btn-link"
+            onClick={() => this.selectMeal(meal)}
+          >
             {meal.mealName}
           </button>
         </TableLineWithDelete>
@@ -66,6 +70,11 @@ class MealsManager extends React.Component {
 
   removeMeal(meal) {
     const action = { type: "REMOVE_MEAL", value: meal };
+    this.props.dispatch(action);
+  }
+
+  selectMeal(meal) {
+    const action = { type: "SELECT_MEAL", value: meal };
     this.props.dispatch(action);
   }
 }
